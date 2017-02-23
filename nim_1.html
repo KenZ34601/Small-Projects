@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<HTML>
+<HEAD>
+<META NAME="description" content="Coins Nim Game is written in HTML and JavaScript">
+<META NAME="author" content="Ken Zhou">
+<META NAME="keywords" content="Game, Coins Nim, Zhou, JavaScript">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<title>Match Nim</title>
+<style type="text/css">
+input,select {font-size:15px}
+</style>
+<script language="JavaScript">
+var i, IsOver, IsRemoving=false, N, Max=16, Move=0, Start=0, StartTime, EndTime, Mode=0;
+Level = new Array(2);
+Level[0]=0;
+Level[1]=1;
+Fld = new Array(Max);
+Pic= new Array(4);
+for (i=0; i<4; i++)
+{ Pic[i] = new Image();
+  Pic[i].src = "quarters"+i+".jpeg"; 
+}
+
+function SetMode(mm)
+{ Mode=parseInt(mm);
+  Init(false);
+}
+
+function SetStart(ss)
+{ if (IsRemoving) return;
+  Start=parseInt(ss);
+  Init(false);
+}
+
+function SetLevel(nn, mm)
+{ Level[nn]=parseInt(mm);
+}
+
+function Timer()
+{ if (IsOver) return;
+  if (IsRemoving) return;
+  if (Level[Move]==0) return;
+  MakeBestMove();
+}
+
+function Init(IsNew)
+{ var ii, ss;
+  if (IsRemoving) return;
+  if (IsNew) 
+  { do ii=12+Math.floor(Math.random()*5);
+    while(ii==N);
+    N=ii;
+  }
+  ss=Math.floor((Max-N)/2);
+  for (ii=0; ii<Max; ii++) Fld[ii]=0;
+  for (ii=ss; ii<ss+N; ii++) Fld[ii]=1;
+  Move=Start;
+  IsOver=false;
+  RefreshScreen();  
+  Now = new Date();
+  StartTime = Now.getTime() / 1000;
+}
+
+function Clicked(ii)
+{ if (IsOver) return;
+  if (IsRemoving) return;
+  var jj, nn=0;
+  if (Move==0)
+  { for (jj=0; jj<=ii; jj++) nn+=Fld[jj];
+    if ((nn<1)||(nn>3)) alert("You must remove 1, 2 or 3 quarters \nfrom the left side!");
+  }
+  else
+  if (Move==0)
+  { for (jj=ii; jj<Max; jj++) nn+=Fld[jj];
+    if ((nn<1)||(nn>3)) alert("You must remove 1, 2 or 3 quarters \nfrom the right side!");
+  }
+  if ((nn<1)||(nn>3)) return;
+  Remove(nn);
+}
+
+function OverTest()
+{ var ii, nn=0;
+  IsOver=false;
+  for (ii=0; ii<Max; ii++) nn+=Fld[ii];
+  if (nn>0) return(false);
+  IsOver=true;
+  if ((Move+Mode)%2==0) alert("The player at the right side has won!");
+  else alert("The player at the left side has won!");
+  return(true);
+}
+
+function MakeBestMove()
+{ var ii, nn=0;
+  for (ii=0; ii<Max; ii++) nn+=Fld[ii];
+  if (nn>3) 
+  { if (Level[Move]==1) nn=Math.floor(Math.random()*3)+1;
+    else nn=(nn-Mode)%4;
+    if (nn==0) nn=Math.floor(Math.random()*3)+1;
+  }
+  else
+  { if ((Mode==1)&&(nn>1)) nn--;    
+  }
+  Remove(nn);
+}
+
+function Remove(nn)
+{ var ii, jj, mm=0;
+  if (Move==0)
+  { ii=-1;
+    do
+    { ii++;
+      mm+=Fld[ii];
+    }
+    while((mm<nn)&&(ii<Max-1));
+    for (jj=ii-mm+1; jj<=ii; jj++)
+    { Fld[jj]+=2;
+      RefreshPic(jj);
+      Fld[jj]=0;
+    }
+  }
+  else    
+  { ii=Max;
+    do
+    { ii--;
+      mm+=Fld[ii];
+    }
+    while((mm<nn)&&(ii>0));
+    for (jj=ii; jj<ii+mm; jj++)
+    { Fld[jj]+=2;
+      RefreshPic(jj);
+      Fld[jj]=0;
+    }
+  }
+  Move=1-Move;
+  IsRemoving=true;
+  setTimeout("RefreshScreen()",400);  
+}
+
+function RefreshPic(nn)
+{ window.document.images[nn].src = Pic[Fld[nn]].src;
+}
+
+function RefreshScreen()
+{ for (var ii=0; ii< Max; ii++) RefreshPic(ii);
+  IsRemoving=false;
+  OverTest();
+}
+
+function ShowHelp()
+{ alert("The players alternately remove 1, 2 or 3 quarters from the row."+
+      "\nThe player wins (loses), who removes the last match.");
+}
+</script>
+</head>
+<BODY bgcolor=#887766>
+<DIV ALIGN=center>
+<form>
+<table border=2 cellpadding=6 cellspacing=8 bgcolor=#999999><tr>
+<td bgcolor=#000000>
+<table noborder cellpadding=0 cellspacing=0><tr align=center>
+<script language="JavaScript">
+document.open("text/plain");
+for (i=0; i < Max; i++)
+  document.writeln("<td><IMG src=\"quarters.jpeg\" border=0 onMouseDown=\"Clicked("+i+")\"></td>");
+document.close();
+</script>
+</tr></table>
+</td>
+</tr></table>
+<br>
+<table border=2 cellpadding=2 cellspacing=4 bgcolor=#999999><tr><td>
+<table border=0 cellpadding=1 cellspacing=1>
+<tr><td colspan=5 align=center>
+  <table border=0 cellpadding=0 cellspacing=0>
+  <tr><td><b><i>The player who takes the last match </i></b></td>
+      <td>
+<SELECT onChange="SetMode(this.options[selectedIndex].value)" SIZE=1>
+<OPTION VALUE=0 selected>wins
+<OPTION VALUE=1>loses
+</SELECT>
+      </td></tr>
+  </table>
+</td></tr>
+<tr><td rowspan=2 align=center valign=bottom><b><i>Left side player:</i></b><br>
+<SELECT onChange="SetLevel(0, this.options[selectedIndex].value)" SIZE=1>
+<OPTION VALUE=0 selected>Human
+<OPTION VALUE=1>Computer - Beginner
+<OPTION VALUE=2>Computer  - Expert
+</SELECT></td>
+    <td align=center>
+      <input type=button value="New" width=40 style="width:40" onClick="javascript:Init(true)">
+    </td>
+    <td align=center>
+      <input type=button value="Repeat" width=55 style="width:55" onClick="javascript:Init(false)">
+    </td>
+    <td align=center>
+      <input type=button value="Help" width=45 style="width:45" onClick="javascript:ShowHelp()">
+    </td>
+    <td rowspan=2 align=center valign=bottom><b><i>Right side player:</i></b><br>
+<SELECT onChange="SetLevel(1, this.options[selectedIndex].value)" SIZE=1>
+<OPTION VALUE=0>Human
+<OPTION VALUE=1 selected>Computer - Beginner
+<OPTION VALUE=2>Computer  - Expert
+</SELECT></td>
+</tr>
+<tr>
+<td colspan=3 align=center>
+<SELECT onChange="SetStart(this.options[selectedIndex].value)" SIZE=1>
+<OPTION VALUE=0>Left side player begins
+<OPTION VALUE=1>Right side player begins
+</SELECT>
+</td>
+</tr></table>
+</td>
+</tr></table>
+</form>
+</DIV>
+<script language="JavaScript">
+  Init(true);
+  setInterval("Timer()",1000);  
+</script>
+</BODY>
+</HTML>
