@@ -1,0 +1,101 @@
+body {
+    background-color: #242424;
+}
+
+#play-area {
+    width: 600px;
+    height: 600px;
+    border: 5px solid blue;
+    background-color: white;
+}
+
+#game-header {
+    height: 32px;
+    background-color: gray;
+}
+
+#play-button {
+    position: absolute;
+    top: 250px;
+    left: 250px;
+    width: 100px;
+    height: 100px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: default;
+}
+
+#help-button {
+    width: 32px;
+    height: 32px;
+    margin-left: 557px;
+    padding: 0;
+    border: none;
+    cursor: default;
+    background-color: transparent;
+}
+
+.help {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+    margin-top: 32px;
+    border: 1px solid red;
+    background-color: orange;
+    padding: 0 10px;
+    z-index: 1;
+    opacity: 0.96;
+    filter: alpha(opacity=90);
+}
+
+.help h3 {
+    text-align: center;
+}
+
+#scoreboard {
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#table {
+    display: table;
+    margin: 0 auto;
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+    width: 125px;
+}
+
+.cell p {
+    font-size: 40px;
+    margin: 10px 0;
+}
+
+#ok-button {
+    width: 60px;
+    margin: 40px auto;
+    display: block;
+}
+
+.token {
+    position: absolute;
+    background-color: black;
+    width: 50px;
+    height: 50px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    z-index: 0;
+}
+
