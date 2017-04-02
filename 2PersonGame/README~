@@ -1,0 +1,35 @@
+/*----------------------------------------------------------------------------*
+ * Title:          README                                                     *
+ * Author:         Ken Zhou                                                   *
+ * Date:           04/01/17                                                   *
+ * Description:    For a 2 person zero sum game, each player has some number 
+ *                 of strategies. In a combinatorial fashion, one could obtain*
+ *                 a payoff matrix  In this case, that means you and   *
+ *                 the computer.  When you start the game, a random number of *
+ *                 piles consisting of a random number of stones is put       *
+ *                 together. Both players take turns. Each turn a player must *
+ *                 remove one or more stones from a pile. The player that     *
+ *                 takes the last stone(s) from the only remaining pile wins. *
+ *----------------------------------------------------------------------------*/
+
+According to Game Theory, to find equilibrium points of 2 person zero-sum
+ game, one follow the 7 rules below::
+i. check for saddle points
+ii. use the formula for 2 by 2case.
+iii. use the formula for 2 by n case or m by 2 case.
+iv. use the principle of indifference
+v. use the principle of invariance
+vi. use the formula for n by n case, if the payoff matrix is non degenerate
+vii. use the linear programming formulation
+
+Using these 7 principles above, the program take the payoff matrix as input
+,and it will generate output ( p~, ~q, V ), where p~ = (p1, p2, ..., pm) and
+ ~q = (q1, q2, ..., qn) are equilibrium strategies for player 1 and player 2,
+ respectively, and V is the the value of the game. For demonstration, a
+ random generator creates 100 payoff matrices with random value of 1 to 10
+strategy index for player 1 (row player), 1 to 10 for player 2 (column
+play), and a random payoff value between -1000 to 1000.
+
+The program also uses the python API for Gambit, a third party program designed
+to compute equilibrium for n-person players. The output from Gambit will be used
+as true values to compare with the answers from the program I wrote.
